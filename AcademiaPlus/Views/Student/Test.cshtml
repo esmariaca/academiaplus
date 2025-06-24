@@ -1,0 +1,9 @@
+﻿@model AcademiaPlus.ViewModels.StudentViewModel
+
+<h2>Test Create Submit</h2>
+
+<form asp-controller="Student" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="Name" placeholder="Name" class="form-control mb-2" />
+    <button type="submit" class="btn btn-primary">Test Submit</button>
+</form>

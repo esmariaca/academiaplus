@@ -1,0 +1,18 @@
+﻿@model AcademiaPlus.ViewModels.StudentViewModel
+
+<h2>Eliminar</h2>
+
+<div>
+    <p>Name: @Model.Name</p>
+    <p>Lastname: @Model.Lastname</p>
+    <p>Document: @Model.Document</p>
+    <p>Email: @Model.Email</p>
+</div>
+
+<form asp-controller="Student"  asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="/Student/Index" class="btn btn-success">Cancel</a>
+</form>
+
