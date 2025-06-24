@@ -1,0 +1,36 @@
+﻿@using AcademiaPlus.ViewModels
+@model StudentViewModel
+
+
+<h2>Crear Estudiante</h2>
+
+<form asp-controller="Student" asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">@Html.DisplayNameFor(m => m.Name)</label>
+        <input asp-for="Name" class="form-control" name="Name" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Lastname" class="form-label">@Html.DisplayNameFor(m => m.Lastname)</label>
+        <input asp-for="Lastname" class="form-control" name="Lastname" required />
+        <span asp-validation-for="Lastname" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Document" class="form-label">@Html.DisplayNameFor(m => m.Document)</label>
+        <input asp-for="Document" class="form-control" name="Document" required />
+        <span asp-validation-for="Document" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">@Html.DisplayNameFor(m => m.Email)</label>
+        <input asp-for="Email" class="form-control" name="Email" required />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a href="/Student/Index" class="btn btn-success">Volver</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

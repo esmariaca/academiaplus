@@ -1,0 +1,57 @@
+﻿@model List<AcademiaPlus.ViewModels.StudentViewModel>
+
+<h2>Lista de Estudiantes</h2>
+
+<a href="/Student/Create" class="btn btn-primary">➕ Agregar Nuevo Estudiante</a>
+<br />
+@if (Model != null && Model.Any())
+{
+    <div class="list-group">
+        @foreach (var student in Model)
+        {
+            <br />
+            <div class="list-group-item">
+                <div class="mb-2">
+                    <strong>📌 Nombre:</strong> @student.Name @student.Lastname
+                    <br />
+                    <strong>🆔 Documento:</strong> @student.Document
+                    <br />
+                    <strong>✉ Correo:</strong> @student.Email
+                </div>
+                <br />
+                <div class="btn-group">
+                    <a href="@Url.Action("Edit", "Student", new { id = student.Id })" class="btn btn-outline-info">Editar</a>
+                    <a href="@Url.Action("Delete", "Student", new { id = student.Id })" class="btn btn-outline-info">Eliminar</a>
+                    <a href="@Url.Action("RegisterSubject", "Student", new { id = student.Id })" class="btn btn-outline-info">Inscribir Materia</a>
+                </div>
+                <br />
+                <div class="mb-2">
+                    <strong>📚 Materias inscritas:</strong>
+                    @if (student.Subjects != null && student.Subjects.Any())
+                    {
+                        @foreach (var subject in student.Subjects)
+                        {
+                            <span class="badge bg-primary">
+                                @subject.Matter (@subject.Code)
+                                <form asp-action="UnregisterSubject" asp-controller="Student" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="studentId" value="@student.Id" />
+                                    <input type="hidden" name="subjectId" value="@subject.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger ms-1" style="padding: 0 6px; font-size: 0.75rem; line-height: 1;">X</button>
+                                </form>
+                            </span>
+                        }
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin materias inscritas</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted">No hay estudiantes registrados.</p>
+}

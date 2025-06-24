@@ -1,0 +1,65 @@
+﻿@using AcademiaPlus.ViewModels
+@model RegistrationViewModel
+
+<h2>Inscribir Materia</h2>
+
+<form asp-controller="Student" asp-action="RegisterSubject" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="StudentId" value="@Model.StudentId" id="StudentIdField" />
+    <input type="hidden" name="SubjectId" value="" id="selectedSubjectId" />
+
+    <div class="mb-3">
+        <label class="form-label">Seleccionar Materia:</label>
+        <select name="SubjectId" class="form-control" id="subjectSelect">
+            <option value="">-- Selecciona una materia --</option>
+            @foreach (var subject in Model.Subjects)
+            {
+                var selectedStudent = Model.Students.FirstOrDefault(s => s.Id == Model.StudentId);
+                var isAlreadyRegistered = selectedStudent?.Subjects?.Any(sub => sub.Id == subject.Id) == true && Model.StudentId > 0;
+
+                @if (isAlreadyRegistered)
+                {
+                    <option value="@subject.Id" disabled>
+                        @subject.Matter (@subject.Code) - Ya inscrito
+                    </option>
+                }
+                else
+                {
+                    <option value="@subject.Id">
+                        @subject.Matter (@subject.Code)
+                    </option>
+                }
+            }
+        </select>
+        @Html.ValidationMessageFor(m => m.SubjectId, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Inscribir</button>
+    <a href="/Student/Index" class="btn btn-success">Volver</a>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let subjectSelect = document.getElementById("subjectSelect");
+        let selectedField = document.getElementById("selectedSubjectId");
+
+        subjectSelect.addEventListener("change", function () {
+            if (selectedField) {
+                selectedField.value = this.value;
+                console.log("SubjectId seleccionado:", this.value);
+            } else {
+                console.warn("Elemento 'selectedSubjectId' no encontrado.");
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("submit", function () {
+        let studentIdField = document.getElementById("StudentIdField");
+        if (!studentIdField.value) {
+            studentIdField.value = "@Model.StudentId";
+        }
+    });
+</script>
