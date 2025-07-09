@@ -28,7 +28,14 @@ namespace AcademiaPlus.Services
         {
             return await _context.Student.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
         }
-
+        public async Task<Student?> GetMatersByIdAsync(int id)
+        {
+            return await _context.Student
+                    .Include(s => s.Registrations)
+                    .ThenInclude(r => r.Subject)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(s => s.Id == id);
+        }
         public async Task<Result> CreateAsync(Student student)
         {
             try
