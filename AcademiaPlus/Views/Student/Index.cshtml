@@ -1,57 +1,55 @@
 ﻿@model List<AcademiaPlus.ViewModels.StudentViewModel>
 
-<h2>Lista de Estudiantes</h2>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
-<a href="/Student/Create" class="btn btn-primary">➕ Agregar Nuevo Estudiante</a>
-<br />
-@if (Model != null && Model.Any())
-{
-    <div class="list-group">
-        @foreach (var student in Model)
-        {
-            <br />
-            <div class="list-group-item">
-                <div class="mb-2">
-                    <strong>📌 Nombre:</strong> @student.Name @student.Lastname
-                    <br />
-                    <strong>🆔 Documento:</strong> @student.Document
-                    <br />
-                    <strong>✉ Correo:</strong> @student.Email
-                </div>
-                <br />
-                <div class="btn-group">
-                    <a href="@Url.Action("Edit", "Student", new { id = student.Id })" class="btn btn-outline-info">Editar</a>
-                    <a href="@Url.Action("Delete", "Student", new { id = student.Id })" class="btn btn-outline-info">Eliminar</a>
-                    <a href="@Url.Action("RegisterSubject", "Student", new { id = student.Id })" class="btn btn-outline-info">Inscribir Materia</a>
-                </div>
-                <br />
-                <div class="mb-2">
-                    <strong>📚 Materias inscritas:</strong>
-                    @if (student.Subjects != null && student.Subjects.Any())
-                    {
-                        @foreach (var subject in student.Subjects)
-                        {
-                            <span class="badge bg-primary">
-                                @subject.Matter (@subject.Code)
-                                <form asp-action="UnregisterSubject" asp-controller="Student" method="post" style="display:inline;">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="studentId" value="@student.Id" />
-                                    <input type="hidden" name="subjectId" value="@subject.Id" />
-                                    <button type="submit" class="btn btn-sm btn-danger ms-1" style="padding: 0 6px; font-size: 0.75rem; line-height: 1;">X</button>
-                                </form>
-                            </span>
-                        }
-                    }
-                    else
-                    {
-                        <span class="text-muted">Sin materias inscritas</span>
-                    }
-                </div>
-            </div>
-        }
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-semibold text-dark border-bottom pb-2 mb-4">
+            <i class="bi bi-people-fill text-primary me-2"></i>
+            Lista de Estudiantes
+        </h2>
+        <a href="/Student/Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle-fill"></i> Nuevo Estudiante
+        </a>
     </div>
-}
-else
-{
-    <p class="text-muted">No hay estudiantes registrados.</p>
-}
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            @foreach (var student in Model)
+            {
+                <div class="col">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark mb-1">
+                                <i class="bi bi-person-circle"></i> @student.Name @student.Lastname
+                            </h5>
+                            <p class="mb-1"><i class="bi bi-credit-card"></i> <strong>Documento:</strong> @student.Document</p>
+                            <p class="mb-3"><i class="bi bi-envelope"></i> <strong>Correo:</strong> @student.Email</p>
+
+                            <div class="d-flex gap-2 mb-3">
+                                <a href="@Url.Action("Edit", "Student", new { id = student.Id })" class="btn btn-outline-success btn-sm">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <a href="@Url.Action("Delete", "Student", new { id = student.Id })" class="btn btn-outline-success btn-sm">
+                                    <i class="bi bi-trash3"></i> Eliminar
+                                </a>
+                                <a href="@Url.Action("RegisterSubject", "Student", new { id = student.Id })" class="btn btn-outline-success btn-sm">
+                                    <i class="bi bi-journal-plus"></i> Inscribir Materia
+                                </a>
+                            </div>
+
+                            <a href="@Url.Action("Subjects", "Student", new { id = student.Id })" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-journal-text"></i> Ver Materias
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning mt-4">No hay estudiantes registrados.</div>
+    }
+</div>

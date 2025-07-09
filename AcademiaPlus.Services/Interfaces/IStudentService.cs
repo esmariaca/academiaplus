@@ -6,6 +6,7 @@ namespace AcademiaPlus.Services.Interfaces
     {
         Task<List<Student>> GetAllAsync();
         Task<Student?> GetByIdAsync(int id);
+        Task<Student?> GetMatersByIdAsync(int id);
         Task<Result> CreateAsync(Student student);
         Task<Result> RegisterSubjectAsync(int studentId, int subjectId);
         Task<Result> UpdateAsync(Student student);

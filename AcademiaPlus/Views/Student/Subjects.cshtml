@@ -1,0 +1,39 @@
+﻿@model AcademiaPlus.ViewModels.StudentViewModel
+
+@{
+    ViewData["Title"] = "Materias inscritas";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-3 text-primary">
+        <i class="bi bi-journal-text"></i> Materias de @Model.Name @Model.Lastname
+    </h2>
+
+    <a href="@Url.Action("Index", "Student")" class="btn btn-outline-secondary mb-4">
+        <i class="bi bi-arrow-left"></i> Volver a Estudiantes
+    </a>
+
+    @if (Model.Subjects != null && Model.Subjects.Any())
+    {
+        <ul class="list-group">
+            @foreach (var subject in Model.Subjects)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>@subject.Matter (@subject.Code)</span>
+                    <form asp-action="UnregisterSubject" asp-controller="Student" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="studentId" value="@Model.Id" />
+                        <input type="hidden" name="subjectId" value="@subject.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            <i class="bi bi-x-circle"></i> Eliminar
+                        </button>
+                    </form>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3">Este estudiante no tiene materias inscritas.</div>
+    }
+</div>

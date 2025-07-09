@@ -259,5 +259,34 @@ namespace AcademiaPlus.Controllers
             TempData["Message"] = "✅ Materia eliminada correctamente.";
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public async Task<IActionResult> Subjects(int id)
+        {
+            var student = await _studentService.GetMatersByIdAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new StudentViewModel
+            {
+                Id = student.Id,
+                Name = student.Name,
+                Lastname = student.Lastname,
+                Document = student.Document,
+                Email = student.Email,
+                Subjects = student.Registrations
+                    .Where(r => r.Subject != null)
+                    .Select(r => new SubjectViewModel
+                    {
+                        Id = r.Subject.Id,
+                        Matter = r.Subject.Matter,
+                        Code = r.Subject.Code
+                    })
+                    .ToList()
+            };
+
+            return View("Subjects", viewModel);
+        }
     }
 }
